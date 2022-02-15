@@ -5,9 +5,9 @@ name: Deploy_AKS_Online_Landingzone
 
 on: 
   workflow_dispatch:
-  push:
-    branches:
-      - starter
+  #push:
+  #  branches:
+  #    - starter
   # issue_comment:
   #   types:
   #   - created

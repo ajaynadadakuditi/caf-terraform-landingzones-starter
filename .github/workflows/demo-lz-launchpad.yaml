@@ -33,7 +33,7 @@ jobs:
       - uses: actions/checkout@v2
       
       - name: clone the public landing zones
-        run |
+        run: |
           git clone https://github.com/Azure/caf-terraform-landingzones.git /tf/caf/landingzones
       
       - name: Login azure
