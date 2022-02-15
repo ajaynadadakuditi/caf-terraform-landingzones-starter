@@ -34,7 +34,7 @@ jobs:
       
       - name: clone the public landing zones
         run: |
-          git clone https://github.com/Azure/caf-terraform-landingzones.git ${{ GITHUB_WORKSPACE }}/landingzones
+          git clone https://github.com/Azure/caf-terraform-landingzones.git ${GITHUB_WORKSPACE}/landingzones
       
       - name: Login azure
         run: |
@@ -46,7 +46,7 @@ jobs:
 
       - name: deployLaunchpad100
         run: |
-          /tf/rover/rover.sh -lz ${{ GITHUB_WORKSPACE }}/landingzones/caf_launchpad \
+          /tf/rover/rover.sh -lz ${GITHUB_WORKSPACE}/landingzones/caf_launchpad \
             -var-folder ${{ GITHUB_WORKSPACE }}/configuration/${{ env.ENVIRONMENT }}/level0/launchpad \
             -launchpad \
             -level level0 \
