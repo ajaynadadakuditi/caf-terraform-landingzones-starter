@@ -10,7 +10,7 @@ env:
   ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
   ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
   ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
-  ENVIRONMENT: "DEMO"
+  ENVIRONMENT: 'demo'
   CAF_ENVIRONMENT: "ajay-demo"
   ROVER_RUNNER: true
 
@@ -47,11 +47,11 @@ jobs:
       - name: deployLaunchpad100
         run: |
           /tf/rover/rover.sh -lz ${GITHUB_WORKSPACE}/caf_launchpad \
-            -var-folder ${GITHUB_WORKSPACE}/configuration/${{ environment }}/level0/launchpad \
+            -var-folder ${GITHUB_WORKSPACE}/configuration/${{ ENVIRONMENT }}/level0/launchpad \
             -launchpad \
             -level level0 \
             -parallelism=30 \
             -env ${{ CAF_ENVIRONMENT }} \ 
             -a apply
-            sleep 180  
+            
   
