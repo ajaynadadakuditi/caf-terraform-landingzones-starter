@@ -47,11 +47,11 @@ jobs:
       - name: deployLaunchpad100
         run: |
           /tf/rover/rover.sh -lz ${GITHUB_WORKSPACE}/caf_launchpad \
-            -var-folder ${GITHUB_WORKSPACE}/configuration/${{ ENVIRONMENT }}/level0/launchpad \
+            -var-folder ${GITHUB_WORKSPACE}/configuration/${{ env.ENVIRONMENT }}/level0/launchpad \
             -launchpad \
             -level level0 \
             -parallelism=30 \
-            -env ${{ CAF_ENVIRONMENT }} \ 
+            -env ${{ env.CAF_ENVIRONMENT }} \ 
             -a apply
             
   
