@@ -44,7 +44,16 @@ jobs:
           az account show 
           echo "local user: $(whoami)"
 
-      - name: deployLaunchpad100
+      - name: deployLaunchpad100-plan
+        run: |
+          /tf/rover/rover.sh -lz ${GITHUB_WORKSPACE}/landingzones/caf_launchpad -a plan \
+            -var-folder ${GITHUB_WORKSPACE}/configuration/${{ env.ENVIRONMENT }}/level0/launchpad \
+            -launchpad \
+            -level level0 \
+            -parallelism=30 \
+            -env ${{ env.CAF_ENVIRONMENT }}
+      
+      - name: deployLaunchpad100-apply
         run: |
           /tf/rover/rover.sh -lz ${GITHUB_WORKSPACE}/landingzones/caf_launchpad -a apply \
             -var-folder ${GITHUB_WORKSPACE}/configuration/${{ env.ENVIRONMENT }}/level0/launchpad \
