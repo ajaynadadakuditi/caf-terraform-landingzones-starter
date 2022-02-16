@@ -44,14 +44,14 @@ jobs:
           az account show 
           echo "local user: $(whoami)"
 
-      - name: deployL1-plan
-        run: |
-          /tf/rover/rover.sh -lz ${GITHUB_WORKSPACE}/landingzones/caf_solution -a plan \
-            -tfstate caf_foundations.tfstate \
-            -var-folder ${GITHUB_WORKSPACE}/configuration/${{ env.ENVIRONMENT }}/level1 \
-            -level level1 \
-            -parallelism=30 \
-            -env ${{ env.CAF_ENVIRONMENT }}
+      #- name: deployL1-plan
+      #  run: |
+      #    /tf/rover/rover.sh -lz ${GITHUB_WORKSPACE}/landingzones/caf_solution -a plan \
+      #      -tfstate caf_foundations.tfstate \
+      #      -var-folder ${GITHUB_WORKSPACE}/configuration/${{ env.ENVIRONMENT }}/level1 \
+      #      -level level1 \
+      #      -parallelism=30 \
+      #      -env ${{ env.CAF_ENVIRONMENT }}
 
       - name: deployL1-apply
         run: |
