@@ -1,4 +1,4 @@
-name: demo-lz-launchpad
+name: demo-lz-l1
 
 on:
   workflow_dispatch:
@@ -15,8 +15,8 @@ env:
   ROVER_RUNNER: true
 
 jobs:
-  launchpad100:
-    name: launchpad-100
+  landingzone-L1:
+    name: Landingzone-L1
     runs-on: ubuntu-latest
 
     strategy:
@@ -44,23 +44,22 @@ jobs:
           az account show 
           echo "local user: $(whoami)"
 
-      - name: deployLaunchpad100
+      - name: deployL1
         run: |
-          /tf/rover/rover.sh -lz ${GITHUB_WORKSPACE}/landingzones/caf_launchpad -a apply \
-            -var-folder ${GITHUB_WORKSPACE}/configuration/${{ env.ENVIRONMENT }}/level0/launchpad \
-            -launchpad \
-            -level level0 \
+          /tf/rover/rover.sh -lz ${GITHUB_WORKSPACE}/landingzones/caf_solution -a apply \
+            -tfstate caf_foundations.tfstate \
+            -var-folder ${GITHUB_WORKSPACE}/configuration/${{ env.ENVIRONMENT }}/level1 \
+            -level level1 \
             -parallelism=30 \
             -env ${{ env.CAF_ENVIRONMENT }}
       
-      - name: testLaunchpad100
+      - name: testL1
         run: |
           sleep 180
           /tf/rover/rover.sh test \
             -b ${GITHUB_WORKSPACE}/configuration/${{ env.ENVIRONMENT }}/tests \
-            -tfstate caf_launchpad.tfstate \
-            -level level0 \
-            -env ${{ env.CAF_ENVIRONMENT }} \
-            -log-severity FATAL
+            -tfstate caf_foundations.tfstate \
+            -level level1 \
+            -env ${{ env.CAF_ENVIRONMENT }}
             
   
