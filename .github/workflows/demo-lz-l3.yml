@@ -1,0 +1,63 @@
+name: demo-lz-l3
+
+on:
+  workflow_dispatch:
+  
+env:
+  TF_CLI_ARGS: '-no-color'
+  TF_CLI_ARGS_destroy: '-auto-approve -refresh=false'
+  ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
+  ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
+  ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
+  ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
+  ENVIRONMENT: 'demo'
+  CAF_ENVIRONMENT: "ajay-demo"
+  ROVER_RUNNER: true
+
+jobs:
+  landingzone-L3:
+    name: Landingzone-L3
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: true
+      max-parallel: 1
+      matrix:
+          random_length: ['5']
+
+    container:
+      image: aztfmod/rover:1.1.3-2201.2106
+      options: --user 0
+
+    steps:
+      - uses: actions/checkout@v2
+      
+      - name: clone the public landing zones
+        run: |
+          git clone https://github.com/Azure/caf-terraform-landingzones.git ${GITHUB_WORKSPACE}/landingzones
+      
+      - name: Login azure
+        run: |
+          echo "logging into azure environment..."
+          az login --service-principal -u '${{ env.ARM_CLIENT_ID }}' -p '${{ env.ARM_CLIENT_SECRET }}' --tenant '${{ env.ARM_TENANT_ID }}'
+          az account set -s  ${{ env.ARM_SUBSCRIPTION_ID }}
+          az account show 
+          echo "local user: $(whoami)"
+
+      - name: deployL3AKS
+        run: |
+          /tf/rover/rover.sh -lz ${GITHUB_WORKSPACE}/landingzones/caf_solution -a apply \
+            -tfstate landing_zone_aks.tfstate \
+            -var-folder ${GITHUB_WORKSPACE}/configuration/${{ env.ENVIRONMENT }}/level3/aks \
+            -level level3 \
+            -parallelism=30 \
+            -env ${{ env.CAF_ENVIRONMENT }}
+      
+      - name: deployL2DataAndAnalytics
+        run: |
+          /tf/rover/rover.sh -lz ${GITHUB_WORKSPACE}/landingzones/caf_solution -a apply \
+            -tfstate landing_zone_101_aml_workspace.tfstate \
+            -var-folder ${GITHUB_WORKSPACE}/configuration/${{ env.ENVIRONMENT }}/level3/data_analytics/101-aml-workspace \
+            -level level3 \
+            -parallelism=30 \
+            -env ${{ env.CAF_ENVIRONMENT }}
