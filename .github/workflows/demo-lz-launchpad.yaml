@@ -53,14 +53,14 @@ jobs:
             -parallelism=30 \
             -env ${{ env.CAF_ENVIRONMENT }}
       
-      - name: testLaunchpad100
-        run: |
-          sleep 180
-          /tf/rover/rover.sh test \
-            -b ${GITHUB_WORKSPACE}/configuration/${{ env.ENVIRONMENT }}/tests \
-            -tfstate caf_launchpad.tfstate \
-            -level level0 \
-            -env ${{ env.CAF_ENVIRONMENT }} \
-            -log-severity FATAL
+      #- name: testLaunchpad100
+      #  run: |
+      #    sleep 180
+      #    /tf/rover/rover.sh test \
+      #      -b ${GITHUB_WORKSPACE}/configuration/${{ env.ENVIRONMENT }}/tests \
+      #      -tfstate caf_launchpad.tfstate \
+      #      -level level0 \
+      #      -env ${{ env.CAF_ENVIRONMENT }} \
+      #      -log-severity FATAL
             
   
