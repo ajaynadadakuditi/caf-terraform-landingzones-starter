@@ -1,4 +1,4 @@
-name: demo-lz-l1
+name: demo-lz-l2
 
 on:
   workflow_dispatch:
@@ -15,8 +15,8 @@ env:
   ROVER_RUNNER: true
 
 jobs:
-  landingzone-L1:
-    name: Landingzone-L1
+  landingzone-L2:
+    name: Landingzone-L2
     runs-on: ubuntu-latest
 
     strategy:
@@ -44,20 +44,21 @@ jobs:
           az account show 
           echo "local user: $(whoami)"
 
-      - name: deployL1
+      - name: deployL2SharedServices
         run: |
           /tf/rover/rover.sh -lz ${GITHUB_WORKSPACE}/landingzones/caf_solution -a apply \
-            -tfstate caf_foundations.tfstate \
-            -var-folder ${GITHUB_WORKSPACE}/configuration/${{ env.ENVIRONMENT }}/level1 \
-            -level level1 \
+            -tfstate caf_shared_services.tfstate \
+            -var-folder ${GITHUB_WORKSPACE}/configuration/${{ env.ENVIRONMENT }}/level2/shared_services \
+            -level level2 \
             -parallelism=30 \
             -env ${{ env.CAF_ENVIRONMENT }}
       
-      #- name: testL1
-      #  run: |
-      #    sleep 180
-      #    /tf/rover/rover.sh test \
-      #      -b ${GITHUB_WORKSPACE}/configuration/${{ env.ENVIRONMENT }}/tests \
-      #      -tfstate caf_foundations.tfstate \
-      #      -level level1 \
-      #      -env ${{ env.CAF_ENVIRONMENT }}
+      - name: deployL2NetworkingHub
+        run: |
+          sleep 180
+          /tf/rover/rover.sh -lz ${GITHUB_WORKSPACE}/landingzones/caf_solution -a apply \
+            -tfstate networking_hub.tfstate \
+            -var-folder ${GITHUB_WORKSPACE}/configuration/${{ env.ENVIRONMENT }}/level2/networking/hub \
+            -level level2 \
+            -parallelism=30 \
+            -env ${{ env.CAF_ENVIRONMENT }}
