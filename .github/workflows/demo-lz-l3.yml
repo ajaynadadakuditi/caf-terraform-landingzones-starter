@@ -44,7 +44,16 @@ jobs:
           az account show 
           echo "local user: $(whoami)"
 
-      - name: deployL3AKS
+      - name: deployL3AKS-plan
+        run: |
+          /tf/rover/rover.sh -lz ${GITHUB_WORKSPACE}/landingzones/caf_solution -a plan \
+            -tfstate landing_zone_aks.tfstate \
+            -var-folder ${GITHUB_WORKSPACE}/configuration/${{ env.ENVIRONMENT }}/level3/aks \
+            -level level3 \
+            -parallelism=30 \
+            -env ${{ env.CAF_ENVIRONMENT }}
+
+      - name: deployL3AKS-apply
         run: |
           /tf/rover/rover.sh -lz ${GITHUB_WORKSPACE}/landingzones/caf_solution -a apply \
             -tfstate landing_zone_aks.tfstate \
